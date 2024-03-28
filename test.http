@@ -1,0 +1,28 @@
+@baseUri = https://embeddingtest.mail5184.workers.dev
+
+### Ingest into vector database
+
+
+GET {{baseUri}}/insert
+Content-Type: application/json
+
+### Get result from vector database
+
+
+GET {{baseUri}}?q=bicep container
+Content-Type: application/json
+
+
+### Post a vector
+POST {{baseUri}}/insertraw
+Content-Type: application/json
+api-key: {{$dotenv api-key}}
+
+< /Users/sjkp/projects/embedding-nodejs/output3.json
+
+
+### Health 
+
+POST {{baseUri}}/health
+api-key: {{$dotenv api-key}}
+Content-Type: application/json
