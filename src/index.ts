@@ -1,4 +1,5 @@
 import { Ai } from '@cloudflare/ai';
+import { QdrantClient } from '@qdrant/js-client-rest';
 export interface Env {
 	VECTORIZE_INDEX: VectorizeIndex;
 	AI: any;
@@ -67,7 +68,23 @@ export default {
 			text: [userQuery],
 		});
         let mid = performance.now();
-		let matches = await env.VECTORIZE_INDEX.query(queryVector.data[0], { topK: 5 });
+		//let matches2 = await env.VECTORIZE_INDEX.query(queryVector.data[0], { topK: 5 });
+		const client = new QdrantClient({
+			url: env.QDRANT_ENDPOINT, 
+			apiKey: env.QDRANT_API_KEY 
+		  });
+		let searchResult = await client.search("posts", {
+				vector: queryVector.data[0],
+				limit: 10,	
+		});
+
+		let matches = {
+			matches: searchResult.map((item) => ({
+				id: item.payload!.id,
+				score: item.score,			
+			}))
+		};
+
         let end = performance.now();
 		return Response.json({
 			// Expect a vector ID. 1 to be your top match with a score of
@@ -77,7 +94,7 @@ export default {
             embedDuration: mid - start,
             queryDuration: end - mid,
             q: userQuery,
-			matches: matches,
+			matches: matches,			
 		});
 	},
 };

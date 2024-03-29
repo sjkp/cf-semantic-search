@@ -14,3 +14,4 @@ index_name = "sjkpdk"
 binding = "AI" # available in your Worker on env.AI
 
 [vars]
+QDRANT_ENDPOINT="https://f9528bea-8de5-4729-b1d7-55d0097bdc00.us-east4-0.gcp.cloud.qdrant.io:6333"
